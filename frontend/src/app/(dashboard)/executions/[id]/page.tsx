@@ -35,7 +35,7 @@ export default function ExecutionDetailPage() {
   const router = useRouter();
   const params = useParams();
   const [execution, setExecution] = useState<ExecutionWithWorkflow | null>(null);
-  const [logs, setLocalLogs] = useState<ExecutionLog[]>([]);
+  const [logs, setLogs] = useState<ExecutionLog[]>([]);
   const [agentStatuses, setAgentStatuses] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const socketRef = useRef<Socket | null>(null);
@@ -75,7 +75,7 @@ export default function ExecutionDetailPage() {
     });
 
     socket.on('log', (data: ExecutionLog) => {
-      setLocalLogs(prev => [...prev, data]);
+      setLogs(prev => [...prev, data]);
     });
   }, []);
 
@@ -85,7 +85,7 @@ export default function ExecutionDetailPage() {
       setExecution(res.data);
 
       const logsRes = await executionsApi.getLogs(params.id as string);
-      setLocalLogs(logsRes.data);
+      setLogs(logsRes.data);
 
       if (res.data.status === 'running' || res.data.status === 'pending') {
         connectWebSocket(params.id as string);

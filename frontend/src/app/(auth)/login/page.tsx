@@ -24,9 +24,8 @@ export default function LoginPage() {
       toast.success('Welcome back!');
       router.push('/dashboard');
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Login failed';
       const axiosMessage = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      toast.error(axiosMessage || message);
+      toast.error(axiosMessage || 'Login failed');
     } finally {
       setLoading(false);
     }
