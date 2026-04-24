@@ -17,6 +17,9 @@ interface WorkflowEdge {
   target: string;
 }
 
+/** Delay between sequential agent executions to avoid overwhelming downstream services. */
+const AGENT_EXECUTION_DELAY_MS = 500;
+
 @Injectable()
 export class OrchestratorService {
   private readonly logger = new Logger(OrchestratorService.name);
@@ -103,7 +106,7 @@ export class OrchestratorService {
             result: result.substring(0, 500),
           });
 
-          await new Promise((resolve) => setTimeout(resolve, 500));
+          await new Promise((resolve) => setTimeout(resolve, AGENT_EXECUTION_DELAY_MS));
         } catch (agentError) {
           const errMsg = agentError instanceof Error ? agentError.message : String(agentError);
           await this.log(executionId, dbAgent?.id || null, `Agent ${agent.name} failed: ${errMsg}`, 'error');

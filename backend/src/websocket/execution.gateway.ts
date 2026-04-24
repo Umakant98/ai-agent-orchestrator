@@ -12,7 +12,7 @@ import { Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
 @WebSocketGateway({
-  cors: { origin: '*' },
+  cors: { origin: process.env.FRONTEND_URL || 'http://localhost:3000' },
   namespace: '/ws',
 })
 export class ExecutionGateway implements OnGatewayConnection, OnGatewayDisconnect {

@@ -35,9 +35,11 @@ export class AuthService {
   }
 
   private signToken(userId: string, email: string): string {
+    const secret = this.configService.get<string>('JWT_SECRET');
+    if (!secret) throw new Error('JWT_SECRET environment variable is not set');
     return this.jwtService.sign(
       { sub: userId, email },
-      { secret: this.configService.get<string>('JWT_SECRET', 'default-secret'), expiresIn: '7d' },
+      { secret, expiresIn: '7d' },
     );
   }
 }
